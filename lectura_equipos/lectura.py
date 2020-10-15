@@ -14,7 +14,7 @@ import numpy as np
 import pytz
 
 # from funciones.util_solar import change_datetimeindex
-from funciones.util import interpola2
+# from funciones.util import interpola2
 
 UNIDAD_COMPARTIDA = 'X:'
 UNIDAD_ESTACIONES = 'Z:'
@@ -263,47 +263,47 @@ def lee_estacion(time, tipo_estacion=None, path_estacion=None, muestra_tiempo_le
 
     return todo
 
-@persist_timeseries_to_file(filename_cache='cache_forecastio.csv')
-def lee_forecastio(time, latitud=40.417, longitud=-3.704, api_key='c5ba1f1497c4d44d5c665da0cf5dfed2', enable_cache=False, path_cache=None, update_cache=False):
-    """
-    http://blog.forecast.io/the-forecast-data-api/
-    https://developer.forecast.io/docs/v2
+# @persist_timeseries_to_file(filename_cache='cache_forecastio.csv')
+# def lee_forecastio(time, latitud=40.417, longitud=-3.704, api_key='c5ba1f1497c4d44d5c665da0cf5dfed2', enable_cache=False, path_cache=None, update_cache=False):
+#     """
+#     http://blog.forecast.io/the-forecast-data-api/
+#     https://developer.forecast.io/docs/v2
     
-    https://github.com/ZeevG/python-forecast.io
+#     https://github.com/ZeevG/python-forecast.io
     
-    Please note that we only store the best data we have for a given location and time: in the past, this will usually be observations from weather stations (though we may fall back to forecasted data if we don't have any observations); in the future, data will be more accurate the closer to the present moment you request.
-    """
+#     Please note that we only store the best data we have for a given location and time: in the past, this will usually be observations from weather stations (though we may fall back to forecasted data if we don't have any observations); in the future, data will be more accurate the closer to the present moment you request.
+#     """
 
-    import forecastio
+#     import forecastio
         
-    def lee_momento_forecastio(momento, latitud, longitud, variables=['precipIntensity', 'temperature', 'humidity', 'cloudCover', 'pressure', 'visibility', 'dewPoint']):
+#     def lee_momento_forecastio(momento, latitud, longitud, variables=['precipIntensity', 'temperature', 'humidity', 'cloudCover', 'pressure', 'visibility', 'dewPoint']):
                 
-        data_weather = forecastio.load_forecast(api_key, lat=latitud, lng=longitud, time=momento)
+#         data_weather = forecastio.load_forecast(api_key, lat=latitud, lng=longitud, time=momento)
         
-        datos = {variable:[] for variable in variables}
+#         datos = {variable:[] for variable in variables}
         
-        momentos = []
-        for data_hora in data_weather.hourly().data:
-            momentos.append(data_hora.time + dt.timedelta(hours=data_weather.offset())) # The current timezone offset in hours from GMT
+#         momentos = []
+#         for data_hora in data_weather.hourly().data:
+#             momentos.append(data_hora.time + dt.timedelta(hours=data_weather.offset())) # The current timezone offset in hours from GMT
 
-            for variable in variables:
-                if variable in data_hora.d:
-                    datos[variable].append(data_hora.d[variable])
-                else: # si no tiene campo de la variable se pone un 'None'
-                    datos[variable].append(None)
+#             for variable in variables:
+#                 if variable in data_hora.d:
+#                     datos[variable].append(data_hora.d[variable])
+#                 else: # si no tiene campo de la variable se pone un 'None'
+#                     datos[variable].append(None)
                 
-        return pd.DataFrame(datos, index=momentos)
+#         return pd.DataFrame(datos, index=momentos)
 
-    datos = pd.DataFrame()
-    for dia in np.unique(time.date):
-        momento = dt.datetime.combine(dia, dt.time())
-        datos_dia = lee_momento_forecastio(momento, latitud=latitud, longitud=longitud)
-        datos = datos.append(datos_dia)
+#     datos = pd.DataFrame()
+#     for dia in np.unique(time.date):
+#         momento = dt.datetime.combine(dia, dt.time())
+#         datos_dia = lee_momento_forecastio(momento, latitud=latitud, longitud=longitud)
+#         datos = datos.append(datos_dia)
     
-    # Interpola en caso de que el 'time' (o el equivalente 'time_UTC') tenga una resolución mayor al minuto (resolución estación)
-    datos = interpola2(datos, time)
+#     # Interpola en caso de que el 'time' (o el equivalente 'time_UTC') tenga una resolución mayor al minuto (resolución estación)
+#     datos = interpola2(datos, time)
         
-    return datos
+#     return datos
 
 def genera_fichero_csv_datos_vatimetro(fichero_datos_vati_lcr, planta=None, ruta_lmg_control='C:/Program Files (x86)/LMG-CONTROL/', fichero_inacabado=False):
     """
