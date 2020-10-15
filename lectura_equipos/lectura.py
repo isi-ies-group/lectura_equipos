@@ -215,7 +215,7 @@ def lee_estacion(time, tipo_estacion=None, path_estacion=None, muestra_tiempo_le
         ayer = time.date[0] - dt.timedelta(days=1)
         lista_fechas_time = np.append(lista_fechas_time, ayer)  #añade a la lista de fechas el dia anterior, para cuando se obtiene tiempo UTC haya datas que obtener
     
-    print(lista_fechas_time)
+    # print(lista_fechas_time)
     
     def parserdatetime(date_string): # date, time strings from file - returns datetime composed as combination of datetime.date() and datetime.time()
         return pd.datetime.strptime(date_string, "%Y/%m/%d %H:%M")
