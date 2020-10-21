@@ -218,7 +218,7 @@ def lee_estacion(time, tipo_estacion=None, path_estacion=None, muestra_tiempo_le
     # print(lista_fechas_time)
     
     def parserdatetime(date_string): # date, time strings from file - returns datetime composed as combination of datetime.date() and datetime.time()
-        return pd.datetime.strptime(date_string, "%Y/%m/%d %H:%M")
+        return dt.datetime.strptime(date_string, "%Y/%m/%d %H:%M")
     
     todo = pd.DataFrame([])
     todo.index.name = 'datetime'
