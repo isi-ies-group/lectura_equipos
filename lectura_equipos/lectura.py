@@ -256,7 +256,7 @@ def lee_estacion(time, tipo_estacion=None, path_estacion=None, muestra_tiempo_le
                       tz_localize(None))
         # todo = change_datetimeindex(todo, mode='utc->civil')
 
-    todo = todo.reindex(time)
+    todo = todo[~todo.index.duplicated()].reindex(time)
     
     if muestra_tiempo_lectura:
         print("Tiempo leyendo estación (s): {:.1f}".format(time_t.time() - start_time))
