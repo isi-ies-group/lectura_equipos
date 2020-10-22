@@ -243,9 +243,12 @@ def lee_estacion(time, tipo_estacion=None, path_estacion=None, muestra_tiempo_le
             dia = pd.read_csv(file, date_parser=parserdatetime, parse_dates=[[0, 1]], index_col=0, delimiter='\t')#, usecols=variables) # ignora usecols para evitar pd_issue#14792
 
         except (IOError, TypeError):
-            print('No se encuentra el fichero ' + file)
+            print('No se encuentra el fichero: ', file)
             dia = pd.DataFrame(index=pd.date_range(start=fecha, end=dt.datetime.combine(fecha, dt.time(23, 59)), freq='1T'))   #cuando no hay fichero, se llena de valores vacios
-                
+        
+        except pd.errors.EmptyDataError:
+            print('Archivo de datos vacío: ', file)
+
         dia.index.name = 'datetime'
         
         todo = pd.concat([todo, dia]).sort_index()
