@@ -26,6 +26,8 @@ PATH_INVERSOR_FADRIQUE = UNIDAD_COMPARTIDA + '/Proyectos/NGCPV/planta Villa de D
 
 PATH_ESTACION_GEONICA = UNIDAD_ESTACIONES + '/geonica/'
 PATH_ESTACION_HELIOS = UNIDAD_ESTACIONES + '/Estacion_Helios/'
+PATH_ESTACION_METEO = UNIDAD_ESTACIONES + '/Datos Meteo IES/'
+
 PATH_ESTACION_CAMPANYA = UNIDAD_COMPARTIDA + '/Proyectos/NGCPV/INTREPID array/medidas/campanya/'
 PATH_ESTACION_FADRIQUE = UNIDAD_COMPARTIDA + '/Proyectos/NGCPV/planta Villa de Don Fadrique/medidas/meteo Fadrique/'
 
@@ -159,6 +161,10 @@ def lee_geonica(time, path_estacion=None, enable_cache=False, path_cache=None, u
 def lee_helios(time, path_estacion=None, enable_cache=False, path_cache=None, update_cache=False):
     return lee_estacion(time, tipo_estacion='helios', path_estacion=path_estacion)
 
+@persist_timeseries_to_file(filename_cache='cache_meteo.csv')
+def lee_meteo(time, path_estacion=None, enable_cache=False, path_cache=None, update_cache=False):
+    return lee_estacion(time, tipo_estacion='meteo', path_estacion=path_estacion)
+
 @persist_timeseries_to_file(filename_cache='cache_campanya.csv')
 def lee_campanya(time, path_estacion=None, enable_cache=False, path_cache=None, update_cache=False):
     return lee_estacion(time, tipo_estacion='campanya', path_estacion=path_estacion)
@@ -201,6 +207,9 @@ def lee_estacion(time, tipo_estacion=None, path_estacion=None, muestra_tiempo_le
     elif tipo_estacion == 'helios':
         if path_estacion is None:
             path_estacion = PATH_ESTACION_HELIOS
+    elif tipo_estacion == 'meteo':
+        if path_estacion is None:
+            path_estacion = PATH_ESTACION_METEO
     elif tipo_estacion == 'campanya':
         if path_estacion is None:
             path_estacion = PATH_ESTACION_CAMPANYA
@@ -231,6 +240,8 @@ def lee_estacion(time, tipo_estacion=None, path_estacion=None, muestra_tiempo_le
             path = path_estacion + str(fecha.year) + '/'
         elif tipo_estacion == 'helios':
             path = path_estacion + 'Data' + str(fecha.year) + '/'
+        elif tipo_estacion == 'meteo':
+            path = path_estacion + str(fecha.year) + '/'
         else:
             path = path_estacion
         
