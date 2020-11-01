@@ -217,7 +217,7 @@ def lee_estacion(time, tipo_estacion=None, path_estacion=None, muestra_tiempo_le
         if path_estacion is None:
             path_estacion = PATH_ESTACION_FADRIQUE
     elif tipo_estacion is None:
-        raise ValueError("Elige un tipo de estación: tipo_estacion='geonica', 'campanya', 'fadrique'")
+        raise ValueError("Elige un tipo de estación: tipo_estacion='meteo', 'geonica', 'campanya', 'fadrique'")
   
     lista_fechas_time = np.unique(time.date)
     if tipo_estacion == 'geonica':
@@ -251,15 +251,21 @@ def lee_estacion(time, tipo_estacion=None, path_estacion=None, muestra_tiempo_le
             file = path + tipo_estacion + dt.datetime.strftime(fecha, '%Y_%m_%d') + '.txt'
         
         try:
-            dia = pd.read_csv(file, date_parser=parserdatetime, parse_dates=[[0, 1]], index_col=0, delimiter='\t')#, usecols=variables) # ignora usecols para evitar pd_issue#14792
+            if tipo_estacion == 'meteo':
+                dia = pd.read_csv(file, parse_dates=[0], index_col=0, delimiter='\t')#, usecols=variables) # ignora usecols para evitar pd_issue#14792
+            else:
+                dia = pd.read_csv(file, date_parser=parserdatetime, parse_dates=[[0, 1]], index_col=0, delimiter='\t')#, usecols=variables) # ignora usecols para evitar pd_issue#14792
 
-        except (IOError, TypeError):
-            print('No se encuentra el fichero: ', file)
+        except (IOError):
+            print('No se encuentra el fichero: ', file, '\n', IOError, TypeError)
             dia = pd.DataFrame(index=pd.date_range(start=fecha, end=dt.datetime.combine(fecha, dt.time(23, 59)), freq='1T'))   #cuando no hay fichero, se llena de valores vacios
-        
+
         except pd.errors.EmptyDataError:
             print('Archivo de datos vacío: ', file)
-
+        
+        except TypeError:
+            raise
+            
         dia.index.name = 'datetime'
         
         todo = pd.concat([todo, dia]).sort_index()
