@@ -187,7 +187,7 @@ def lee_estacion(time, tipo_estacion=None, path_estacion=None, muestra_tiempo_le
     >>> import pandas as pd
 
     >>> time = pd.date_range(start='2014/01/01', end='2014/01/31', freq='1T')
-    >>> leido = lee_estacion(time, tipo_estacion='geonica')
+    >>> leido = lee_estacion(time, tipo_estacion='meteo')
     """
 
     if tipo_estacion == 'geonica':
