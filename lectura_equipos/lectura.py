@@ -187,7 +187,7 @@ def lee_estacion(time, tipo_estacion=None, path_estacion=None, muestra_tiempo_le
     >>> import pandas as pd
 
     >>> time = pd.date_range(start='2014/01/01', end='2014/01/31', freq='1T')
-    >>> leido = lee_estacion(time, tipo_estacion='geonica')
+    >>> leido = lee_estacion(time)
     """
 
     if tipo_estacion == 'geonica':
@@ -196,17 +196,17 @@ def lee_estacion(time, tipo_estacion=None, path_estacion=None, muestra_tiempo_le
     elif tipo_estacion == 'helios':
         if path_estacion is None:
             path_estacion = PATH_ESTACION_HELIOS
-    elif tipo_estacion == 'meteo':
-        if path_estacion is None:
-            path_estacion = PATH_ESTACION_METEO
     elif tipo_estacion == 'campanya':
         if path_estacion is None:
             path_estacion = PATH_ESTACION_CAMPANYA
     elif tipo_estacion == 'fadrique':
         if path_estacion is None:
             path_estacion = PATH_ESTACION_FADRIQUE
-    elif tipo_estacion is None:
-        raise ValueError("Elige un tipo de estación: tipo_estacion='meteo', 'geonica', 'campanya', 'fadrique'")
+    elif tipo_estacion is None or tipo_estacion == 'meteo':
+        if path_estacion is None:
+            path_estacion = PATH_ESTACION_METEO        
+    else:
+        raise ValueError("Elige un tipo de estación: tipo_estacion='helios', 'meteo', 'geonica', 'campanya', 'fadrique'")
   
     lista_fechas_time = np.unique(time.date)
     if tipo_estacion == 'geonica':
