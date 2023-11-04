@@ -1,7 +1,7 @@
 # lectura_equipos
 
 Para instalarlo como paquete:
-`pip install --upgrade git+https://github.com/isi-ies-group/lectura_equipos.git`
+`pip install --upgrade --force-reinstall --no-deps git+https://github.com/isi-ies-group/lectura_equipos.git`
 
 Ejemplo de uso:
 ```
